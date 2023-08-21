@@ -1,0 +1,4 @@
+tests/*
+build/*
+deepfake_arian.egg-info/*
+*__pycache__*
