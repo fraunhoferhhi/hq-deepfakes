@@ -1,7 +1,9 @@
 jsonargparse[signatures]
+omegaconf
 opencv-python
 torch
 torchvision
 focal-frequency-loss
 pytorch-lightning==1.9.3
 piq
+wandb
