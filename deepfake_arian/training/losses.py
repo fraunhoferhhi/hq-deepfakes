@@ -10,6 +10,22 @@ from piq import ssim
 
 #### MAIN
 class DeepfakeLoss():
+    '''
+    Loss function for training of deepfake autoencoders.
+    args:
+        eye_multiplier: weight of the eye region for DSSIM and pixelwise losses
+        mouth_multiplier: analogue to eye_multiplier for mouth region
+        blur: whether to blur the mask edges
+        l2_weight: weight of l2 pixelwise loss
+        l1_weight: weight of l1 pixelwise loss
+        ffl_weight: weight of focal frequency loss
+        ffl_alpha: alpha parameter of focal frequency loss
+        ffl_mask: whether to apply a mask to the face before computing ffl 
+        NOTE: LPIPS not implemented yet
+        lpips_weight: weight of lpips loss
+        lpips_net: which arch to use for lpips loss
+        lpips_mask: whether to apply a mask to the face before computing lpips loss
+    '''
     def __init__(self, 
                  eye_multiplier: int = 3, 
                  mouth_multiplier: int = 2, 
@@ -38,8 +54,10 @@ class DeepfakeLoss():
 
     def compute(self, X, y, m):
         loss_dict = {}
+        # compute DSSIM + pixelwise losses
         loss_dict["ReconstructionLoss"] = self.loss_recon.compute(X, y, m)
 
+        # compute ffl
         if self.ffl_weight > 0:
             if self.ffl_mask:
                 X_in = mask_input(X, m, mode="face", blur=False)
@@ -48,7 +66,8 @@ class DeepfakeLoss():
                 X_in, y_in = X, y
 
             loss_dict["FocalFrequencyLoss"] = self.loss_ffl(y_in, X_in)
-
+        
+        # compute lpips
         # if self.lpips_weight > 0:
         #     if self.lpips_mask:
         #         X_in = mask_input(X, m, mode="face", blur=False)

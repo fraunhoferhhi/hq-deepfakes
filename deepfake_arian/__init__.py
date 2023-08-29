@@ -1,1 +1,0 @@
-from .deepfake_arian import *

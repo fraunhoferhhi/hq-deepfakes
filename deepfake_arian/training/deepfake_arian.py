@@ -10,6 +10,18 @@ from .model import custom
 
 # MODEL
 class DeepfakeModel(pl.LightningModule):
+    '''
+    Model lightningmodule for deepfake training. Use in combination with the subsequent datamodule.
+    args:
+        cfg: which config to load for the autoencoder (defines the architecture of the autoencoder). Currently only EB4_RDA is supported.
+        lr: learning rate of entire model
+        eps: epsilon parameter of adam optimizer
+        l2_weight: weight of l2 pixel loss
+        l1_weight: weight of l1 pixel loss
+        ffl_weight: weight of focal frequency loss
+        stop_warping: when to stop using warped input images (recommended to set after half or two thirds of total training)
+        image_logging_interval: frequency of images logged
+    '''
     def __init__(self,
                  cfg: str = "EB4_RDA",
                  lr: float = 5e-5,
