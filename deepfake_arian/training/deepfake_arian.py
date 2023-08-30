@@ -51,7 +51,7 @@ class DeepfakeModel(pl.LightningModule):
         X_a, y_a, m_a = batch["A"]
         X_b, y_b, m_b = batch["B"]
 
-        if self.stop_warping < self.global_step:
+        if self.global_step < self.stop_warping:
             X = torch.cat((X_a, X_b), dim = 1)
         else:
             X = torch.cat((y_a, y_b), dim = 1)
@@ -73,7 +73,7 @@ class DeepfakeModel(pl.LightningModule):
         self.log("Loss", loss)
 
         if self.global_step % self.image_logging_interval == 0:
-            self.logger.log_image(key="Recon vs. Target", images=[torch.concat((pred_a[0, [2,1,0]], y_a[0, [2,1,0]], pred_b[0, [2,1,0]], y_b[0, [2,1,0]]), 2)])
+            self.logger.log_image(key="Recon vs. Target", images=[torch.concat((pred_a[0, [2,1,0]], X_a[0, [2,1,0]], y_a[0, [2,1,0]], pred_b[0, [2,1,0]], X_b[0, [2,1,0]], y_b[0, [2,1,0]]), 2)])
 
 
         return loss
