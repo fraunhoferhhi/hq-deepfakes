@@ -90,6 +90,10 @@ class DeepfakeDataset(Dataset):
         eye_points = (mask == 4)*1.0 + (mask == 5)*1.0
         eye_points = eye_points.astype(np.uint8)
 
+        if len(np.unique(eye_points)) == 1:
+            eye_points = (mask==6)*1.0
+            eye_points = eye_points.astype(np.uint8)
+
         mask = face_points + eye_points*9 + mouth_points*19
 
         return mask
