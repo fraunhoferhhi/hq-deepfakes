@@ -83,7 +83,7 @@ class DeepfakeDataset(Dataset):
         return X_a, y_a, mask_a
     
     def _clean_mask(self, mask):
-        face_points = np.logical_or(np.logical_and(mask<6, mask>0), np.logical_and(mask>9, mask<14)).astype(np.uint8)
+        face_points = np.logical_or(np.logical_and(mask<7, mask>0), np.logical_and(mask>9, mask<14)).astype(np.uint8)
 
         mouth_points = np.logical_or(mask==11, np.logical_or(mask==12, mask==13)).astype(np.uint8)
 
