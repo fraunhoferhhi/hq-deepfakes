@@ -99,42 +99,44 @@ class Converter():
         alignments = load_alignments(prep_path)
 
         # load video, build fake video
-        video_name = video_path.split(".")[0]
+        video_name = video_path.split(".")[0].split("/")[-1]
         video = load_video(video_path)
         fake_video = np.zeros_like(video)
 
         num_frames = video.shape[0]
 
+        self.logger.info("Start processing of {} frames".format(num_frames))
         # convert in batches
-        for i in range(0, num_frames, self.batch_size):
-            start = i
-            end = min(i + self.batch_size, num_frames)
+        with torch.no_grad():
+            for i in range(0, num_frames, self.batch_size):
+                start = i
+                end = min(i + self.batch_size, num_frames)
 
-            # pre blending performs forward pass through model and obtains new masks based on the intersection of old and newly computed masks
-            new_faces, old_faces, masks = self._pre_blending(video, video_name, alignments, start, end, direction)
+                # pre blending performs forward pass through model and obtains new masks based on the intersection of old and newly computed masks
+                new_faces, old_faces, masks = self._pre_blending(video, video_name, alignments, start, end, direction)
 
-            for j in range(start, end):
-                frame = video[j]
-                new_face = new_faces[j - start]
-                old_face = old_faces[j - start]
-                mask = masks[j - start]
+                for j in range(start, end):
+                    frame = video[j]
+                    new_face = new_faces[j - start]
+                    old_face = old_faces[j - start]
+                    mask = masks[j - start]
 
-                placeholder = frame.copy()
-                background = frame.copy()
+                    placeholder = frame.copy()
+                    background = frame.copy()
 
-                key = "{}_{}.png".format(video_name, j)
-                if key not in alignments.keys():
-                    fake_video[j] = frame
-                else:
-                    matrix = alignments[key]["matrix"]
-                    # pre warp adjustments / plugins
-                    new_face, mask = self._pre_warp_adjustment(old_face, new_face, mask)
-                    # align fake and mask onto base img
-                    patch, mask_aligned = self._patch_images(placeholder, new_face, matrix, mask)
-                    # blend fake patch with background
-                    blended = self._blend_images(patch, background, mask_aligned)
-                    # save blended 
-                    fake_video[j] = blended
+                    key = "{}_{}.png".format(video_name, j)
+                    if key not in alignments.keys():
+                        fake_video[j] = frame
+                    else:
+                        matrix = alignments[key]["matrix"]
+                        # pre warp adjustments / plugins
+                        new_face, mask = self._pre_warp_adjustment(old_face, new_face, mask)
+                        # align fake and mask onto base img
+                        patch, mask_aligned = self._patch_images(placeholder, new_face, matrix, mask)
+                        # blend fake patch with background
+                        blended = self._blend_images(patch, background, mask_aligned)
+                        # save blended 
+                        fake_video[j] = blended
 
         self._save_video(fake_video, video_path)
 
@@ -342,7 +344,7 @@ class Converter():
 
     # saving
     def _save_video(self, fake_video, video_path):
-        model_name = self.model_ckpt.split("/")[-1][:-4]
+        model_name = self.model_ckpt.split("/")[-1].split(".")[0]
         parent_dir = video_path.rpartition("/")[0]
         video_name = video_path.rpartition("/")[-1]
 
