@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 setup(
     name="deepfake_arian",
     py_modules=["deepfake_arian"],
-    version="1.2.1",
+    version="1.2.2",
     description="",
     author="Arian Beckmann",
     packages=find_packages(exclude=["tests*"]),

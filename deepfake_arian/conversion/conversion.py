@@ -70,7 +70,7 @@ class Converter():
         new_state_dict = {}
 
         # clean statedict
-        for k,v in state_dict:
+        for k,v in state_dict.items():
             new_key = k[3:]
             new_state_dict[new_key] = v
 

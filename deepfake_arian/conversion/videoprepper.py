@@ -283,4 +283,6 @@ class VideoPrepper():
 
             retval_masks.append(m)
 
+        torch.cuda.empty_cache()
+
         return retval_masks
