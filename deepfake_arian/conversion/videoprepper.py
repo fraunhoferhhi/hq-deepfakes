@@ -236,7 +236,7 @@ class VideoPrepper():
     def _clean_masks(self, masks):
         # we clean the masks here as we dont need the full segmentation in the conversion phase
         self.logger.debug("Cleaning batch masks...")
-        face_points = np.logical_or(np.logical_and(masks<6, masks>0), np.logical_and(masks>9, masks<14)).astype(int)
+        face_points = np.logical_or(np.logical_and(masks<7, masks>0), np.logical_and(masks>9, masks<14)).astype(int)
         mouth_points = np.logical_or(masks==11, np.logical_or(masks==12, masks==13)).astype(int)*2
         eye_points = np.logical_or(masks==4, masks==5).astype(int)
         brow_points = (masks==2).astype(int)*3

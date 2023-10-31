@@ -1,7 +1,9 @@
 import os
+import shutil
 import yaml
 import zlib
 from pathlib import Path
+from typing import Union
 
 import torch
 from torchvision import transforms
@@ -20,9 +22,9 @@ class Converter():
         model_ckpt: path that holds the model checkpoint.
         model_config: path to the config that was used to build the autoencoder
         batch_size: batch_size of autoencoder forward passes
-        pad: padding that is used prior to mask squeezing (this reduces blending artifacts)
+        pad: padding that is used prior to mask squeezing (this reduces blending artifacts). Can be a list of 4 (top, bot, left right) or single value for all sides
         adjust_color: whether to adjust the colour average of the swap wrt to the input (not necessary since poisson blending also does this)
-        writer: whether to write the fake to an mp4 or pngs
+        writer: whether to write the fake as mp4 or pngs (additional option: mp4-crf14 saves the videos with a lower compression factor than mp4)
         device: device to run autoencoder on
         verbose: whether to log some minor progress statements
     '''
@@ -30,7 +32,7 @@ class Converter():
                  model_ckpt: str,
                  model_config: str,
                  batch_size: int = 8,
-                 pad: int = 30,
+                 pad: Union[list, int] = 30,
                  adjust_color: bool = False,
                  writer: str = "mp4",
                  device: str = "cuda",
@@ -100,7 +102,7 @@ class Converter():
 
         # load video, build fake video
         video_name = video_path.split(".")[0].split("/")[-1]
-        video = load_video(video_path)
+        video, fourcc, fps = load_video(video_path, ret_info=True)
         fake_video = np.zeros_like(video)
 
         num_frames = video.shape[0]
@@ -138,7 +140,7 @@ class Converter():
                         # save blended 
                         fake_video[j] = blended
 
-        self._save_video(fake_video, video_path)
+        self._save_video(fake_video, video_path, fourcc, fps)
 
     def _pre_blending(self, video, video_name, alignments, start, end, direction):
         old_faces = np.zeros((end - start, 256, 256, 3), dtype=np.float32)
@@ -201,11 +203,19 @@ class Converter():
 
         intersection = np.minimum(new_masks, old_masks)
 
-        pad_top = int(self.pad) // 2
-        pad_bot = int(self.pad) // 2
-        pad_left = int(self.pad) // 2
-        pad_right = int(self.pad) // 2
+        if len(self.pad) == 1:
+            pad = self.pad[0]
+            pad_top = int(pad) // 2
+            pad_bot = int(pad) // 2
+            pad_left = int(pad) // 2
+            pad_right = int(pad) // 2
+        else:
+            pad_top = int(self.pad[0])
+            pad_bot = int(self.pad[1])
+            pad_left = int(self.pad[2])
+            pad_right = int(self.pad[3])
 
+        
         # pad and squeeze the masks
         squeezed = np.zeros((new_faces.shape[0], 512 + pad_top + pad_bot, 512 + pad_left + pad_right), dtype=np.uint8)
         start_y = pad_top
@@ -262,7 +272,7 @@ class Converter():
         input_tensor = input_tensor.to(self.device)
         new = self.vp.mask_net(input_tensor / 255.)
         new = new[0].cpu().numpy().argmax(1)
-        new = np.logical_or(np.logical_and(new<6, new>0), np.logical_and(new>9, new<14)).astype(np.uint8)
+        new = np.logical_or(np.logical_and(new<7, new>0), np.logical_and(new>9, new<14)).astype(np.uint8)
         new_masks = new
 
         return new_masks
@@ -343,8 +353,12 @@ class Converter():
         return blended
 
     # saving
-    def _save_video(self, fake_video, video_path):
+    def _save_video(self, fake_video, video_path, fourcc, fps):
         model_name = self.model_ckpt.split("/")[-1].split(".")[0]
+        model_name += "_padding"
+        for p in self.pad:
+            model_name += "-{}".format(p)
+            
         parent_dir = video_path.rpartition("/")[0]
         video_name = video_path.rpartition("/")[-1]
 
@@ -352,5 +366,23 @@ class Converter():
         os.makedirs(out_dir, exist_ok=True)
 
         out_path = os.path.join(out_dir, video_name)
-        save_video(fake_video, out_path, self.writer)
+
+        if self.writer == "mp4":
+            save_video(fake_video, out_path, "mp4", fourcc, fps)
+
+        else:
+            save_video(fake_video, out_path, "png", fourcc, fps)
+
+
+            if self.writer == "mp4-crf14":
+                frame_path = out_path.replace(".mp4", "_frames")
+                cmd = "ffmpeg -framerate {} -pattern_type glob -i '{}/*.png' -c:v libx264 -preset slow -crf 14 -pix_fmt yuv420p {}".format(fps, frame_path, out_path)
+
+                self.logger.info("Finalizing with: {}".format(cmd))
+                os.system(cmd)
+
+                self.logger.info("Removing {}".format(frame_path))
+                shutil.rmtree(frame_path)
+
+
 
