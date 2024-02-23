@@ -140,7 +140,7 @@ class Converter():
                         # save blended 
                         fake_video[j] = blended
 
-        self._save_video(fake_video, video_path, fourcc, fps)
+        self._save_video(fake_video, video_path, None, fps)
 
     def _pre_blending(self, video, video_name, alignments, start, end, direction):
         old_faces = np.zeros((end - start, 256, 256, 3), dtype=np.float32)
