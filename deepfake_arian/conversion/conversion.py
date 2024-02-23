@@ -365,8 +365,7 @@ class Converter():
 
         if out_dir is None:
             out_dir = os.path.join(parent_dir, "fakes", model_name)
-            os.makedirs(out_dir, exist_ok=True)
-
+        os.makedirs(out_dir, exist_ok=True)
         out_path = os.path.join(out_dir, video_name)
 
         if self.writer == "mp4":
