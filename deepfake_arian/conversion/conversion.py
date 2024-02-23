@@ -87,7 +87,8 @@ class Converter():
     def process_video(self,
                       video_path: str,
                       direction: str,
-                      prep_path: str = None):
+                      prep_path: str = None,
+                      out_dir: str = None):
         '''
         video_path: path to video to convert
         direction: whether to swap from A to B or B to A
@@ -140,7 +141,7 @@ class Converter():
                         # save blended 
                         fake_video[j] = blended
 
-        self._save_video(fake_video, video_path, None, fps)
+        self._save_video(fake_video, video_path, None, fps, out_dir)
 
     def _pre_blending(self, video, video_name, alignments, start, end, direction):
         old_faces = np.zeros((end - start, 256, 256, 3), dtype=np.float32)
@@ -353,7 +354,7 @@ class Converter():
         return blended
 
     # saving
-    def _save_video(self, fake_video, video_path, fourcc, fps):
+    def _save_video(self, fake_video, video_path, fourcc, fps, out_dir=None):
         model_name = self.model_ckpt.split("/")[-1].split(".")[0]
         model_name += "_padding"
         for p in self.pad:
@@ -362,8 +363,9 @@ class Converter():
         parent_dir = video_path.rpartition("/")[0]
         video_name = video_path.rpartition("/")[-1]
 
-        out_dir = os.path.join(parent_dir, "fakes", model_name)
-        os.makedirs(out_dir, exist_ok=True)
+        if out_dir is None:
+            out_dir = os.path.join(parent_dir, "fakes", model_name)
+            os.makedirs(out_dir, exist_ok=True)
 
         out_path = os.path.join(out_dir, video_name)
 
