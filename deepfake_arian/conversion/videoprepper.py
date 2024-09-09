@@ -8,7 +8,7 @@ import face_alignment
 import torch
 from torchvision import transforms
 
-from faceex_arian.utils import load_masking_model, load_video, setup_logger, save_alignments, PoseEstimate, _MEAN_FACE, umeyama
+from faceex_arian.utils.utils import load_masking_model, load_video, setup_logger, save_alignments, PoseEstimate, _MEAN_FACE, umeyama
 
 class VideoPrepper():
     '''
@@ -79,7 +79,7 @@ class VideoPrepper():
 
         # save alignments in prep file
         alignments_path = video_path.split(".")[0] + "_prep.fsa"
-        save_alignments(video_alignments, alignments_path)
+        save_alignments(video_alignments, alignments_path, file_type="fsa")
 
     # saving
     def _update_dict(self, alignments, matrices, masks, indices, name):
