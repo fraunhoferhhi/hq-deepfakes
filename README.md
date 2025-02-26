@@ -32,7 +32,7 @@ cd deepfake_arian/tests/
 pytest test_all.py
 ```
 
-If all tests go through, your installation is complete. Note: The tests only perform dummy experiments, the models trained and videos generated in that process are not capable of performing a successfull faceswap.
+If all tests go through, your installation is complete. Note: The tests only perform dummy experiments, the models trained and videos generated in that process are not capable of performing a successfull faceswap. Tip: Have a look at test_all.py to get a better understanding of how to use this package to train a model and use it to convert videos.
 
 ## Data Preparation
 To prepare the data, please refer to https://vigitlab.fe.hhi.de/git/faceex_arian. In the end, you should have two directories containing the facesets of source and target persons. On top of that, `MaskExtractor` sould be used to generate a `masks.fsa` per directory/person. Note: Save the images in your faceset in 512px resolution.
