@@ -1,0 +1,8 @@
+cfg: EB4_RDA
+lr: 5e-5
+eps: 1e-7
+l2_weight: 1
+l1_weight: 0
+ffl_weight: 0
+stop_warping: 5
+image_logging_interval: 8
