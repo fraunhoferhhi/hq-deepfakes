@@ -14,6 +14,7 @@ from ..training.model import custom
 from .videoprepper import VideoPrepper
 from faceex_arian.utils.utils import setup_logger, load_alignments, load_video, save_video
 
+from tqdm import tqdm
 
 class Converter():
     '''
@@ -32,7 +33,7 @@ class Converter():
                  model_ckpt: str,
                  model_config: str,
                  batch_size: int = 8,
-                 pad: Union[list, int] = 30,
+                 pad: list = [30],
                  adjust_color: bool = False,
                  writer: str = "mp4",
                  device: str = "cuda",
@@ -111,7 +112,7 @@ class Converter():
         self.logger.info("Start processing of {} frames".format(num_frames))
         # convert in batches
         with torch.no_grad():
-            for i in range(0, num_frames, self.batch_size):
+            for i in tqdm(range(0, num_frames, self.batch_size)):
                 start = i
                 end = min(i + self.batch_size, num_frames)
 

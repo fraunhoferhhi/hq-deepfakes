@@ -8,7 +8,9 @@ import face_alignment
 import torch
 from torchvision import transforms
 
-from faceex_arian.utils.utils import load_masking_model, load_video, setup_logger, save_alignments, PoseEstimate, _MEAN_FACE, umeyama
+from tqdm import tqdm
+
+from faceex_arian.utils.utils import load_masking_model, load_video, setup_logger, save_dict, PoseEstimate, _MEAN_FACE, umeyama
 
 class VideoPrepper():
     '''
@@ -57,7 +59,7 @@ class VideoPrepper():
 
         num_frames = video.shape[0]
         with torch.no_grad():
-            for i in range(0, num_frames, self.batch_size):
+            for i in tqdm(range(0, num_frames, self.batch_size)):
                 start = i
                 end = i+self.batch_size if i+self.batch_size < num_frames else num_frames
                 indices = list(range(start, end))
@@ -78,8 +80,8 @@ class VideoPrepper():
                 video_alignments = self._update_dict(video_alignments, matrices, masks, indices, video_name)
 
         # save alignments in prep file
-        alignments_path = video_path.split(".")[0] + "_prep.fsa"
-        save_alignments(video_alignments, alignments_path, file_type="fsa")
+        alignments_path = video_path.split(".")[0] + "_prep"
+        save_dict(video_alignments, alignments_path, file_type="fsa")
 
     # saving
     def _update_dict(self, alignments, matrices, masks, indices, name):

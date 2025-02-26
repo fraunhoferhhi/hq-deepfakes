@@ -98,17 +98,3 @@ class DeepfakeDataset(Dataset):
 
         return mask
     
-# if __name__ == '__main__':
-#     with torch.no_grad():
-#         path = "/home/beckmann/Projects/Bloodflow/data/facesets/recordings/ID_08"
-#         ds = DeepfakeDataset(path)
-
-#         x, y, m = ds[10]
-#         print(x.shape, y.shape, m.shape)
-#         y = np.moveaxis(y.numpy(), 0 , -1)
-#         cv2.imwrite("y.png", y*255)
-
-#         m = m.numpy()
-#         print(m.max())
-#         print(m.max()*255.)
-#         cv2.imwrite("m.png", m.astype(np.uint8))

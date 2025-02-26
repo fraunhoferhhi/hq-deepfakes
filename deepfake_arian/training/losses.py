@@ -280,10 +280,11 @@ def mask_input(x, m, mode ="face", blur=True):
     elif mode == "mouth":
         mask = (m == 20)*1.0
 
+
     if blur:
         mask = gaussian_blur(mask)
 
-    mask = mask.unsqueeze(1)
+    mask = mask.unsqueeze(0)
     x_masked = x*mask
 
     return x_masked
