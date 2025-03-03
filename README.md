@@ -2,7 +2,7 @@
 This package, written by Arian, can be used to train faceswapping autoencoders and perform faceswaps on input videos. The user should be familiar with at least pytorch lightning, in the optimal case with lightning cli, since the code is structured according to these frameworks. The code also uses wandb for logging. Moreover, this package does not include the code needed to generate data needed for training these models; for this please refer to https://vigitlab.fe.hhi.de/git/faceex_arian.
 
 ## Setup
-The package was developed on a Ubuntu 20.04 machine with an RTX 3090 and CUDA 12.2. I am sure that the package will also run older / newer systems, some of the package versions should be adjusted however. For the installation we create a conda environment and install the necessary dependencies.
+The package was developed on a Ubuntu 20.04 machine with an RTX 3090 and CUDA 11.7. I am sure that the package will also run older / newer systems, some of the package versions should be adjusted however. For the installation we create a conda environment and install the necessary dependencies.
 
 ```bash
 conda create --name myenv python=3.7.16
