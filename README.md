@@ -14,6 +14,9 @@ Now we clone the repo and install some requirements.
 ```bash
 git clone git@vigitlab.fe.hhi.de:git/deepfake_arian.git
 cd deepfake_arian
+```
+```bash
+pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 --extra-index-url https://download.pytorch.org/whl/cu117
 pip install -r requirements.txt
 ```
 
