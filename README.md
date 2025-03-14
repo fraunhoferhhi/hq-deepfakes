@@ -20,7 +20,7 @@ pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 --extra-index-url http
 pip install -r requirements.txt
 ```
 
-Before we can finalize the installation we need to install the faceex package from here: https://vigitlab.fe.hhi.de/git/faceex_arian. Just follow the instructions given there. Note: The ibug packages are not required to run this codebase here. Finalize your installation with.
+Finally, install the package. Make sure you are in the right directory (the one that holds the entire repository).
 ```bash
 pip install deepfake_arian
 ```
