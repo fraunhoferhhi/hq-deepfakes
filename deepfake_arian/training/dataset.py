@@ -9,7 +9,7 @@ import torch
 from torch.utils.data import Dataset
 from torchvision import transforms
 
-from .utils import Augmentator
+from .trainutils import Augmentator
 
 class DeepfakeDataset(Dataset):
     '''

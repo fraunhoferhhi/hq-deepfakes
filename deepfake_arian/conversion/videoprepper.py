@@ -10,7 +10,7 @@ from torchvision import transforms
 
 from tqdm import tqdm
 
-from faceex_arian.utils.utils import load_masking_model, load_video, setup_logger, save_dict, PoseEstimate, _MEAN_FACE, umeyama
+from .utils.convutils import load_masking_model, load_video, setup_logger, save_dict, PoseEstimate, _MEAN_FACE, umeyama
 
 class VideoPrepper():
     '''

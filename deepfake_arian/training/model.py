@@ -4,8 +4,8 @@ import torch
 from torch import nn
 from torchvision.models import get_model
 
-from .utils import EB4_RDA
-from .utils import UpscaleBlock, Upsampling2D, UpscaleResizeImagesBlock, ResidualBlock, GaussianNoise, CustomReshape, CustomFlatten, GBlock
+from .trainutils import EB4_RDA
+from .trainutils import UpscaleBlock, Upsampling2D, UpscaleResizeImagesBlock, ResidualBlock, GaussianNoise, CustomReshape, CustomFlatten, GBlock
 
 
 class custom(nn.Module):

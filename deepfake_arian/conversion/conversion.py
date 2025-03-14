@@ -12,7 +12,7 @@ import numpy as np
 
 from ..training.model import custom
 from .videoprepper import VideoPrepper
-from faceex_arian.utils.utils import setup_logger, load_alignments, load_video, save_video
+from .utils.convutils import setup_logger, load_alignments, load_video, save_video
 
 from tqdm import tqdm
 
