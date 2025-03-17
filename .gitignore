@@ -1,4 +1,4 @@
 build/*
-deepfake_arian.egg-info/*
+hq_deepfakes.egg-info/*
 *__pycache__*
 *.ckpt
