@@ -22,7 +22,7 @@ conda activate myenv
 Now we clone the repo and install some requirements.
 
 ```bash
-git clone git@vigitlab.fe.hhi.de:git/deepfake_arian.git
+git clone git@github.com:twangmaestro/hq-deepfakes.git
 cd deepfake_arian
 ```
 ```bash
