@@ -16,5 +16,8 @@ setup(
             open(os.path.join(os.path.dirname(__file__), "requirements.txt"))
         )
     ],
-    include_package_data=True
+    include_package_data=True,
+    package_data={
+        "hq_deepfakes": ["conversion/pretrained/799999_iter.pth"],
+    }
 )

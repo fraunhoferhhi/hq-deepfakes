@@ -1,5 +1,15 @@
-# Deepfake Package 1.3.0
-This package, written by Arian, can be used to train faceswapping autoencoders and perform faceswaps on input videos. The user should be familiar with at least pytorch lightning, in the optimal case with lightning cli, since the code is structured according to these frameworks. The code also uses wandb for logging. Moreover, this package does not include the code needed to generate data needed for training these models; for this please refer to https://vigitlab.fe.hhi.de/git/faceex_arian.
+<div align="center">
+   <h1 align="center">Fooling State-of-the-Art Deepfake Detection with High-Quality Deepfakes</h1>
+   <br />
+
+  <p align="center">
+    <a href="https://arxiv.org/abs/2305.05282" target="_blank"><strong>arXiv</strong></a>
+  </p>
+
+</div>
+
+
+This repository contains the official code for training and converting videos with the face-swapping autoencoders from aforementioned publication. The code provides a light python package, which can be installed in order to import necessary tools such as model and dataset classes. The user should be familiar with at least pytorch lightning, in the optimal case with lightning cli, since the code is structured according to these frameworks. The code also uses wandb for logging. Moreover, this package does not include the code needed to generate data needed for training these models.
 
 ## Setup
 The package was developed on a Ubuntu 20.04 machine with an RTX 3090 and CUDA 11.7. I am sure that the package will also run older / newer systems, some of the package versions should be adjusted however. For the installation we create a conda environment and install the necessary dependencies.

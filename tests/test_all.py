@@ -29,13 +29,13 @@ def successful(successful_path):
 
 def test_import():
     try:
-        import deepfake_arian
+        import hq_deepfakes
     except Exception as e:
         pytest.fail(f"Import of package failed! Error {e}")
 
 
 def test_training(paths):
-    import deepfake_arian as dfa
+    import hq_deepfakes as df
     import pytorch_lightning as pl
     from pytorch_lightning.callbacks import ModelCheckpoint
     from pytorch_lightning.loggers.logger import DummyLogger
@@ -80,8 +80,8 @@ def test_training(paths):
     trainer_cfg["callbacks"] = [checkpoint_callback]
     trainer_cfg["logger"] = logger
 
-    model = dfa.training.DeepfakeModel(**model_cfg)
-    data = dfa.training.DeepfakeDatamodule(**data_cfg)
+    model = df.training.DeepfakeModel(**model_cfg)
+    data = df.training.DeepfakeDatamodule(**data_cfg)
     trainer = pl.Trainer(**trainer_cfg)
 
     trainer.fit(model, datamodule=data)
@@ -95,14 +95,14 @@ def test_training(paths):
 def test_videoprep(paths):
     _, videos_path, _, _ = paths
 
-    from deepfake_arian.conversion import VideoPrepper
+    from hq_deepfakes.conversion import VideoPrepper
     vp = VideoPrepper(device="cuda", batch_size=8, verbose=True)
     vp.process_dir(videos_path)
 
 def test_conversion(paths):
     _, videos_path, configs_path, outputs_path = paths
     
-    from deepfake_arian.conversion import Converter
+    from hq_deepfakes.conversion import Converter
     converter = Converter(
         model_ckpt=os.path.join(outputs_path, "training", "checkpoints", "last.ckpt"),
         model_config=os.path.join(configs_path, "all.yml")
