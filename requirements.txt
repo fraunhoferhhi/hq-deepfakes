@@ -1,0 +1,13 @@
+face_alignment==1.4.1
+focal-frequency-loss==0.3.0
+jsonargparse==4.27.5
+numpy==1.21.6
+omegaconf==2.3.0
+opencv_python==4.9.0.80
+piq==0.8.0
+pytest==7.4.4
+pytorch_lightning==1.9.3
+PyYAML==6.0.1
+setuptools==65.6.3
+tqdm==4.66.2
+wandb==0.16.3
