@@ -33,6 +33,17 @@ def test_import():
     except Exception as e:
         pytest.fail(f"Import of package failed! Error {e}")
 
+def test_preparation(paths):
+    import hq_deepfakes as df
+    _, videos_path, _, outputs_path = paths
+
+    outputs_path = os.path.join(outputs_path, "preparation", "faces")
+    ex = df.preparation.FaceExtractor(every_nth_frame=10)
+    ex.process(videos_path, outputs_path)
+
+    mx = df.preparation.MasksExtractor()
+    mx.process(data_path=outputs_path)
+
 
 def test_training(paths):
     import hq_deepfakes as df
